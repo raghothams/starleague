@@ -1,14 +1,17 @@
+__author__ = 'raghothams'
+
 class User:
 # User
-# 	id
 # 	name
 # 	password
 # 	batch_name
+#	email
 
 	def __init__(self):
 		self.name=""
 		self.password=""
 		self.batch_name = ""
+		self.email = ""
 
 	def set_name(self, name):
 		self.name = name
@@ -19,6 +22,9 @@ class User:
 	def set_batch(self, batch):
 		self.batch_name = batch
 
+	def set_email(self, email):
+		self.email = email
+
 	def get_name(self):
 		return self.name
 
@@ -28,11 +34,15 @@ class User:
 	def get_batch(self):
 		return self.batch_name
 
+	def get_email(self):
+		return self.email
+
 	def __str__(self):
 		jsoned = {
 					"name" : self.get_name(),
 					"password" : self.get_password(),
-					"batchname" : self.get_batch()
+					"batchname" : self.get_batch(),
+					"email" : self.get_email()
 				}
 
 

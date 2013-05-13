@@ -1,3 +1,4 @@
+__author__ = 'raghothams'
 
 import pymongo
 import json
@@ -33,6 +34,5 @@ def main():
 
 	except Exception, e:
 		print e
-	
 
 main()

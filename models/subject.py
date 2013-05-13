@@ -1,6 +1,8 @@
 
 
 class Subject:
+__author__ = 'raghothams'
+
 # Subject
 # 	id
 # 	name
