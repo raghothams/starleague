@@ -10,7 +10,7 @@ class SubjectDAO:
 		self.subject_collection = self.db.subjects
 
 	def get_subjects_by_batch(self, batch):
-		print "in get by name"
+		print "in get by batch"
 		collection = self.subject_collection
 		subjects = collection.find({"batchname":batch})
 
@@ -23,8 +23,8 @@ class SubjectDAO:
 			model_subject.set_name(subject["name"])
 			model_subject.set_star(subject["star"])
 			model_subject.set_batch(subject["batchname"])
-			model_subject.set_week(subject["weeknum"])
-			
+			model_subject.set_date(subject["date"])
+			model_subject.set_published(subject["published"])	
 			# append modelled subject to array
 			modelled_subject_arr.append(model_subject)
 
@@ -43,7 +43,8 @@ class SubjectDAO:
 			model_subject.set_name(subject["name"])
 			model_subject.set_star(subject["star"])
 			model_subject.set_batch(subject["batchname"])
-			model_subject.set_week(subject["weeknum"])
+			model_subject.set_date(subject["date"])
+			model_subject.set_published(subject["published"])	
 			
 			# append modelled subject to array
 			modelled_subject_arr.append(model_subject)

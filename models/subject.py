@@ -7,13 +7,15 @@ __author__ = 'raghothams'
 # 	id
 # 	name
 # 	star
-# 	week_num
+# 	date
 # 	batch_name
+# 	published
 
 	def __init__(self):
 		self.name = ""
-		self.week_num = -1
+		self.date = -1
 		self.batch_name = ""
+		published = false
 
 	def set_star(self,number):
 		self.star = number
@@ -28,11 +30,14 @@ __author__ = 'raghothams'
 	def get_name(self):
 		return self.name
 
-	def set_week(self, week_no):
-		self.week_num = week_no
+	def set_date(self, date_no):
+		self.date = date_no
 
-	def get_week(self):
-		return self.week_num
+	def set_published(self, status):
+		self.published = status
+
+	def get_date(self):
+		return self.date
 
 	def set_batch(self, batchname):
 		self.batch_name = batchname
@@ -40,12 +45,16 @@ __author__ = 'raghothams'
 	def get_batch(self):
 		return self.batch_name
 
+	def is_published(self):
+		return self.published
+
 	def __str__(self):
 
 		jsoned = {
 					"name" : self.get_name(),
-					"weeknum" : self.get_week(),
+					"date" : self.get_date(),
 					"batchname" : self.get_batch(),
-					"star" : self.get_star()
+					"star" : self.get_star(),
+					"published" : self.is_published()
 				}
 		return jsoned
