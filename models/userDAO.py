@@ -42,7 +42,7 @@ class UserDAO:
 		salt = password.split(',')[1]
 
 		# Check if the user password matches
-		if password != self.make_pw_hash(password, salt):
+		if password != self.make_pw_hash(pw, salt):
 			print "user password is not a match"
 			return None
 
