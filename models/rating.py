@@ -1,21 +1,23 @@
 
 
-class Subject:
+class Rating:
 __author__ = 'raghothams'
 
-# Subject
+# Rating
 # 	id
 # 	name
 # 	star
 # 	date
 # 	batch_name
-# 	published
+# 	user
+#	sem
 
 	def __init__(self):
 		self.name = ""
 		self.date = -1
 		self.batch_name = ""
-		published = false
+		self.username = ""
+		self.sem = -1
 
 	def set_star(self,number):
 		self.star = number
@@ -33,8 +35,11 @@ __author__ = 'raghothams'
 	def set_date(self, date_no):
 		self.date = date_no
 
-	def set_published(self, status):
-		self.published = status
+	def set_username(self, uname):
+		self.username = uname
+
+	def set_sem(self, semno):
+		self.sem = semno
 
 	def get_date(self):
 		return self.date
@@ -45,16 +50,20 @@ __author__ = 'raghothams'
 	def get_batch(self):
 		return self.batch_name
 
-	def is_published(self):
-		return self.published
+	def get_username(self):
+		return self.username()
+
+	def get_sem(self):
+		return self.sem
 
 	def __str__(self):
 
 		jsoned = {
-					"name" : self.get_name(),
-					"date" : self.get_date(),
-					"batchname" : self.get_batch(),
+					"subject_name" : self.get_name(),
 					"star" : self.get_star(),
-					"published" : self.is_published()
+					"date" : self.get_date(),
+					"batch" : self.get_batch(),
+					"user" : self.get_username(),
+					"sem" : self.get_sem()
 				}
 		return jsoned
