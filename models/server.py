@@ -7,6 +7,7 @@ import bottle
 import re	#regex
 import cgi	#used for content type, length, form etc
 import json
+from batch import Batch
 from batchDAO import BatchDAO
 
 @bottle.get('/serverTest')
@@ -18,10 +19,12 @@ def server_test():
 @bottle.get('/batch')
 def get_batches():
 	result = batches.get_all_batches()
-	bottle.response.content_type = "application/json"
 
-	json_result = json.dumps(result.__dict__)
-	return result
+	bottle.response.content_type = "application/json"
+	# json_result = json.dumps(result.__dict__)
+	# print json_result
+	json_result = json.dumps(result, default=Batch.__str__)
+	return json_result
 
 
 connection_string = "mongodb://localhost"

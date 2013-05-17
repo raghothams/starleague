@@ -1,4 +1,8 @@
+__author__ = 'raghothams'
 
+
+from subjectMaster import SubjectMaster
+import json
 
 class Batch:
 # Batch
@@ -38,7 +42,8 @@ class Batch:
 		self.subjects = subject_master_array
 
 	def append_subject_array(self, subject_master):
-		self.subjects.append(subject_master)
+		for item in subject_master:
+			self.subjects.append(item)
 
 	def get_id(self):
 		return self.id
@@ -52,11 +57,25 @@ class Batch:
 	def get_subjects_array(self):
 		return self.subjects
 
+	def get_stringified_subjects(self):
+		result = []
+		for item in self.subjects:
+			stringified = item.__str__()
+			result.append(stringified)
+
+		print result
+		return result
+
+
 	def __str__(self):
 		jsoned = {
 					'_id' : self.get_id(),
 					'desc' : self.get_desc(),
 					'current_sem' : self.get_current_sem(),
-					'subject_master' : self.get_subjects_array()
+					'subject_master' : self.get_stringified_subjects()
 				}
 		return jsoned
+
+
+	# def __repr__(self):
+	# 	return json.dumps(self.__dict__)
