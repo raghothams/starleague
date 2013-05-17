@@ -1,5 +1,5 @@
 import pymongo
-from batch import batch
+from batch import Batch
 
 class BatchDAO:
 
@@ -19,4 +19,10 @@ class BatchDAO:
 		collection = self.batch_coll
 		result = collection.remove({'_id':modelled_batch.get_id()})
 
+		return result
+
+	def get_all_batches(self):
+
+		collection = self.batch_coll
+		result = collection.find()
 		return result
