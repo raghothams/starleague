@@ -5,6 +5,7 @@ from user import User
 import pymongo
 import hashlib
 import random
+import string
 
 class UserDAO:
 
@@ -29,10 +30,11 @@ class UserDAO:
 		user = None
 		try:
 			collection = self.user_collection
-			user = collection.find_one({"_id":username})
+			user = collection.find_one({"_id":uname})
 
-		except:
+		except Exception as inst:
 			print "error finding user"
+			print inst
 
 		if user is None:
 			print "User not in database"
@@ -56,8 +58,9 @@ class UserDAO:
 		user = {
 					'_id' : modelled_user.get_name(),
 					'password' : password_hash,
-					'email' : modelled_user.get_email,
-					'batch' : modelled_user.get_batch()
+					'email' : modelled_user.get_email(),
+					'batch' : modelled_user.get_batch(),
+					'type' : modelled_user.get_type()
 				}
 
 		try:

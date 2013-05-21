@@ -43,6 +43,24 @@ class BatchDAO:
 		print json.dumps(batches, default=Batch.__str__)
 		return batches
 
+	def get_batch_by_id(self, batchid):
+
+		collection = self.batch_coll
+		item = collection.find_one({'_id':batchid})
+
+		if(item != None):
+			single_batch = Batch()
+			
+			single_batch.set_id(item['_id'])
+			single_batch.set_desc(item['desc'])
+			single_batch.set_current_sem(item['current_sem'])
+			single_batch.set_subject_array(self.construct_subject_master(item))
+
+			return single_batch
+		
+		
+		return None
+
 	def construct_subject_master(self, pymongo_batch):
 
 		modelled_subject_master_array = []
