@@ -40,7 +40,7 @@ class BatchDAO:
 
 			batches.append(single_batch)
 
-		print json.dumps(batches, default=Batch.__str__)
+		# print json.dumps(batches, default=Batch.__str__)
 		return batches
 
 	def get_batch_by_id(self, batchid):

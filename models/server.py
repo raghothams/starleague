@@ -12,6 +12,7 @@ from batch import Batch
 from batchDAO import BatchDAO
 from sessionDAO import SessionDAO
 from userDAO import UserDAO
+from ratingDAO import RatingDAO
 from responseWrapper import ResponseWrapper
 
 @bottle.get('/serverTest')
@@ -26,21 +27,27 @@ def get_batches():
 	result = batches.get_all_batches()
 	wrapped_response = ResponseWrapper()
 
+	# print result
+	bottle.response.content_type = "application/json"
+	json_result = None
+
 	if result != None :
-		wrapped_response.set_data(json.dumps(result, default=Batch.__str__))
+		wrapped_response.set_data(result)
 		wrapped_response.set_error("false")
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
-		return json_result
+	
 	else:
 		wrapped_response.set_error("true")
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
-		return json_result
 
-	bottle.response.content_type = "application/json"
+	return json_result
+
 
 @bottle.get('/signup')
 def render_singup():
 	return "signup with username and password"
+
+
 
 @bottle.get('/batch/<batchid>')
 # get the specified batch
@@ -49,18 +56,70 @@ def get_batch(batchid):
 	result = batches.get_batch_by_id(batchid)
 	bottle.response.content_type = "application/json"
 	
+	array = [result]
 	wrapped_response = ResponseWrapper()
 	json_result = None
 	
 	if result != None :
-		wrapped_response.set_data(result,Batch)
+		wrapped_response.set_data(array)
 		wrapped_response.set_error("false")
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
-		return json_result
+	
 	else:
 		wrapped_response.set_error("true")
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
-		return json_result
+
+	return json_result
+
+
+@bottle.get('/myratings')
+def get_myratings():
+
+	cookie = bottle.request.get_cookie("session")
+	username = sessions.get_username(cookie)  # see if user is logged in
+
+	result = ratings.get_user_ratings(username)
+
+	wrapped_response = ResponseWrapper()
+	json_result = None
+
+	if result != None :
+		wrapped_response.set_data(result)
+		wrapped_response.set_error("false")
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+	
+	else:
+		wrapped_response.set_error("true")
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+
+	bottle.response.content_type = "application/json"
+	return json_result
+
+@bottle.get('/myratings/sem/<semno>')
+def get_myratings_by_sem(semno):
+
+	cookie = bottle.request.get_cookie("session")
+	username = sessions.get_username(cookie)  # see if user is logged in
+	print username, semno
+	result = ratings.get_user_ratings_by_sem(username,semno)
+
+	wrapped_response = ResponseWrapper()
+	json_result = None
+
+	if result != None :
+		wrapped_response.set_data(result)
+		wrapped_response.set_error("false")
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+	
+	else:
+		wrapped_response.set_error("true")
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+
+	bottle.response.content_type = "application/json"
+	return json_result
+
+
+
 
 # handles a login request
 @bottle.post('/login')
@@ -95,6 +154,8 @@ def process_login():
         #                             login_error="Invalid Login"))
 		return "error logging in"
 
+
+
 @bottle.post('/signup')
 def process_signup():
 
@@ -124,6 +185,8 @@ def process_signup():
 	else:
 		print "user did not validate"
 		return bottle.template("signup", errors)
+
+
 
 @bottle.get("/welcome")
 def present_welcome():
@@ -176,6 +239,7 @@ database = connection.starleague
 batches = BatchDAO(database)
 users = UserDAO(database)
 sessions = SessionDAO(database)
+ratings = RatingDAO(database)
 
 bottle.debug(True)
 bottle.run(host='localhost',port=8082)

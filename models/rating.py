@@ -1,7 +1,6 @@
-
+__author__ = 'raghothams'
 
 class Rating:
-__author__ = 'raghothams'
 
 # Rating
 # 	id
@@ -51,7 +50,7 @@ __author__ = 'raghothams'
 		return self.batch_name
 
 	def get_username(self):
-		return self.username()
+		return self.username
 
 	def get_sem(self):
 		return self.sem

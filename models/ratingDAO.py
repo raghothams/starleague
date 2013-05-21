@@ -54,6 +54,43 @@ class RatingDAO:
 		
 		return modelled_rating_arr
 
+	def get_user_ratings(self, user):
+		collection = self.rating_collection
+		ratings = collection.find({'user' : user})
+
+		modelled_rating_arr = []
+		for rating in ratings:
+			model_rating = Rating()
+			model_rating.set_name(rating["subject_name"])
+			model_rating.set_star(rating["star"])
+			model_rating.set_date(rating["date"])
+			model_rating.set_batch(rating["batch"])
+			model_rating.set_username(rating["user"])
+			model_rating.set_sem(rating["sem"])
+
+			modelled_rating_arr.append(model_rating)
+		return modelled_rating_arr
+
+	def get_user_ratings_by_sem(self, user, semno):
+		collection = self.rating_collection
+
+		ratings = collection.find({"user":user, "sem":int(semno)})
+
+		modelled_rating_arr = []
+		for rating in ratings:
+			model_rating = Rating()
+			model_rating.set_name(rating["subject_name"])
+			model_rating.set_star(rating["star"])
+			model_rating.set_date(rating["date"])
+			model_rating.set_batch(rating["batch"])
+			model_rating.set_username(rating["user"])
+			model_rating.set_sem(rating["sem"])
+
+			modelled_rating_arr.append(model_rating)
+		print modelled_rating_arr
+		return modelled_rating_arr
+		
+
 	def insert_Rating(self, rating):
 		
 		collection = self.rating_collection
