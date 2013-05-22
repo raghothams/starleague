@@ -4,7 +4,7 @@ class ResponseWrapper:
 
 	def __init__(self):
 		self.data = []
-		self.error = None
+		self.error = False
 		# self.typeinfo = None
 
 	def set_data(self, data):

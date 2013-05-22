@@ -95,8 +95,41 @@ class RatingDAO:
 		
 		collection = self.rating_collection
 		# print(Rating.__str__())
-		result = collection.insert(rating.__str__())
+		result = collection.insert(rating.__str__(False))
 		return result
+
+
+
+
+	# to get average for all subjects
+	# db.ratings.aggregate({$group:{_id:{subject:"$subject_name",sem:"$sem"},avg:{$avg:"$star"}}})	
+
+	def get_average_rating(self):
+
+		collection = self.rating_collection
+		result = collection.aggregate([
+				{"$group":{"_id":{"subject":"$subject_name","sem":"$sem"}, "avg":{"$avg":"$star"}}}
+			])
+
+		return result
+
+
+
+	# to get average for specified subject
+	# db.ratings.aggregate({$match:{'subject_name':'sqe'}},{$group:{_id:{subject:"$subject_name",sem:"$sem"},avg:{$avg:"$star"}}})
+	
+	# method to get average ratings for a given subject in a semester
+	def get_average_rating_by_subject(self, subject_name, semno):
+
+		collection = self.rating_collection
+		result = collection.aggregate([
+				{"$match":{"subject_name":subject_name, "sem":int(semno)}},
+				{"$group":{"_id":{"subject":"$subject_name","sem":"$sem"}, "avg":{"$avg":"$star"}}}
+			])
+
+		return result
+
+
 
 	
 

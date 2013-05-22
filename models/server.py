@@ -108,15 +108,55 @@ def get_myratings_by_sem(semno):
 
 	if result != None :
 		wrapped_response.set_data(result)
-		wrapped_response.set_error("false")
+		wrapped_response.set_error(False)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 	
 	else:
-		wrapped_response.set_error("true")
+		wrapped_response.set_error(True)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
 	bottle.response.content_type = "application/json"
 	return json_result
+
+
+@bottle.get('/leaderboard/subject/<subj>/sem/<semno>')
+def get_average_for_subject(subj, semno):
+
+	result = ratings.get_average_rating_by_subject(subj, semno)
+	serialized = None
+	
+	if result != None:
+		serialized = { "error":False,
+					"data":result
+				}
+	else:
+		serialized = { "error":True,
+					"data":""
+				}
+	
+	bottle.response.content_type = "application/json"
+	return json.dumps(serialized)
+
+
+@bottle.get('/leaderboard')
+def get_average_for_subject():
+
+	result = ratings.get_average_rating()	
+	serialized = None
+	
+	if result != None:
+		serialized = { "error":False,
+					"data":result
+				}
+	else:
+		serialized = { "error":True,
+					"data":""
+				}
+				
+	bottle.response.content_type = "application/json"
+	return json.dumps(serialized)
+
+
 
 
 
