@@ -9,6 +9,7 @@ class Batch:
 # 	id
 # 	desc
 # 	current_sem
+# 	status
 	# "subjects":
 		# [
 		# 	{
@@ -28,6 +29,7 @@ class Batch:
 		self. desc = ""
 		self.current_sem = -1
 		self.subjects = []
+		self.status = False
 
 	def set_id(self, id):
 		self.id = id
@@ -44,6 +46,12 @@ class Batch:
 	def append_subject_array(self, subject_master):
 		for item in subject_master:
 			self.subjects.append(item)
+
+	def set_status(self, status):
+		self.status = status
+
+	def get_status(self):
+		return self.status
 
 	def get_id(self):
 		return self.id
@@ -72,7 +80,8 @@ class Batch:
 					'_id' : self.get_id(),
 					'desc' : self.get_desc(),
 					'current_sem' : self.get_current_sem(),
-					'subject_master' : self.get_stringified_subjects()
+					'subject_master' : self.get_stringified_subjects(),
+					'status': self.get_status()
 				}
 		return jsoned
 

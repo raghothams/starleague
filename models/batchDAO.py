@@ -61,6 +61,15 @@ class BatchDAO:
 		
 		return None
 
+	def get_all_running_batches(self):
+
+		result = []
+		collection = self.batch_coll
+		result = collection.find({'status':True})
+
+		return result
+
+
 	def construct_subject_master(self, pymongo_batch):
 
 		modelled_subject_master_array = []

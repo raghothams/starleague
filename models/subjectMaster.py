@@ -14,6 +14,11 @@ class SubjectMaster:
 		self.faculty = ""
 		self.sem = -1
 
+	def __init__(self, name, faculty, sem):
+		self.name = name
+		self.faculty = faculty
+		self.sem = sem
+
 	def set_name(self, subj_name):
 		self.name = subj_name
 

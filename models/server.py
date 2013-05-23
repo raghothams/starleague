@@ -140,26 +140,52 @@ def get_average_for_subject(subj, semno):
 
 @bottle.get('/leaderboard')
 def get_average_for_subject():
+	# get current sem for each batch.
+	# get average ratings for all subjects in current sem
 
-	result = ratings.get_average_rating()	
 	serialized = None
-	
-	if result != None:
+	running_batches = batches.get_all_running_batches()
+	sem_subjects_combo = get_current_sem_subjects(running_batches)
+	# print sem_subjects_combo
+	if sem_subjects_combo != None:
+
+		result = []
+		for item in sem_subjects_combo:		
+			
+			temp_result = ratings.get_average_rating_by_subject(item['subject'],item['sem'])
+			
+			if temp_result != None:
+				result.append(temp_result)
+			else:
+				serialized = { "error":True,
+						"data":""
+					}
+
 		serialized = { "error":False,
-					"data":result
-				}
+						"data":result
+					}
 	else:
-		serialized = { "error":True,
-					"data":""
-				}
-				
-	bottle.response.content_type = "application/json"
-	return json.dumps(serialized)
+			serialized = { "error":True,
+						"data":""
+					}	
+
+	print json.dumps(serialized)
 
 
+	
+	
+	# if result != None:
+	# 	serialized = { "error":False,
+	# 				"data":result
+	# 			}
+	# else:
+	# 	serialized = { "error":True,
+	# 				"data":""
+	# 			}
 
-
-
+	# bottle.response.content_type = "application/json"
+	# return json.dumps(serialized)
+	return "hi"
 
 # handles a login request
 @bottle.post('/login')
@@ -270,6 +296,21 @@ def validate_signup(username, password, verify, email, errors):
             errors['email_error'] = "invalid email address"
             return False
     return True
+
+def get_current_sem_subjects(batch_cursor):
+
+	result = []
+	for item in batch_cursor:
+
+		current_sem = item['current_sem']
+		subject_list = item['subject_master']
+
+		for subject_item in subject_list:
+			if subject_item['sem'] == current_sem:
+				# subject = SubjectMaster(subject_item['name'], subject_item['faculty'], subject_item['sem'])
+				result.append({'subject': subject_item['name'], 'sem':subject_item['sem']})
+
+	return result
 
 
 connection_string = "mongodb://localhost"

@@ -126,17 +126,5 @@ class RatingDAO:
 				{"$match":{"subject_name":subject_name, "sem":int(semno)}},
 				{"$group":{"_id":{"subject":"$subject_name","sem":"$sem"}, "avg":{"$avg":"$star"}}}
 			])
-
+		# print result
 		return result
-
-
-
-	
-
-
-
-	
-
-	
-
-
