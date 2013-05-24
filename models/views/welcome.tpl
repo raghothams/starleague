@@ -14,34 +14,47 @@
 	<body>
 		
 			<div class="page-header">
+				<div class="head-colors"></div>
 				<h1>Star League</h1>
+				<div class="head-colors"></div>
 			</div>
+			<div class="container">
+				<ul class="nav nav-pills">
+					<li class="active">
+		    			<a href="#">Leader Board</a>
+		  			</li>
+		  			<li >
+		    			<a href="#">Rate Now</a>
+		  			</li>
+				</ul>
 
-			<ul class="nav nav-pills">
-				<li class="active">
-	    			<a href="#">Leader Board</a>
-	  			</li>
-	  			<li >
-	    			<a href="#">Rate Now</a>
-	  			</li>
-			</ul>
+				<div class="span12 base" >
+					<!-- base container -->
+					<div class="span1"></div>
+					<div class="span10" id="leader-board-base">
 
-			<div class="span12 base">
-				<!-- base container -->
-				<div class="span1"></div>
-				<div class="span10 content">
+							<!-- <div class = "span4">
+								<div class="well cards">
+									<h2>SUBJECT NAME</h2>
+									<div class="rows">Faculty Name Is Always Big</div>
+									<div class="rows"><span class="icon-star"></span><span class="icon-star"></span></div>
+									<div class="rows"><span>2010-2014</span><span>6 - sem</span></div>
+								</div>
+							</div> -->
+							
 
-						hahahahaha
+					</div>
 				</div>
 			</div>
+			
 		
 
 
-		<div id="footer">
-			<div class="container">
-					lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum
-			</div>
-		</div>
+		<!-- <div id="footer">
+			<div class="foot-design"></div>
+			<div class="foot-content">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</div>
+			<div class="foot-design"></div>
+		</div> -->
 
 
 		<script src = "/static/js/jquery.js"></script>

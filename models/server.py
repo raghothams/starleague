@@ -396,4 +396,4 @@ sessions = SessionDAO(database)
 ratings = RatingDAO(database)
 
 bottle.debug(True)
-bottle.run(host='localhost',port=8082)
+bottle.run(host='0.0.0.0',port=8082)
