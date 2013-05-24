@@ -116,6 +116,10 @@ body{
   height: 40px;
 }
 
+#rate-now{
+  display:none;
+}
+
 .foot-design{
   height:10px;
   width:100;

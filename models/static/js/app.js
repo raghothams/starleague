@@ -7,7 +7,7 @@ $( function(){
 				success: function(res){
 					that.welcome = res;
 				}
-			}).error(function(req,statusText,error){console.log(statusText);})
+			}).error(function(req,statusText,error){console.log(statusText);});
 
 			$.ajax({
 				url:'http://192.168.43.57:8082/app/leaderboard',
@@ -15,7 +15,7 @@ $( function(){
 					dataRenderer.leaderboardInit(res.data);
 
 				}
-			}).error(function(req,statusText,error){console.log(statusText);})
+			}).error(function(req,statusText,error){console.log(statusText);});
 		}
 	}
 
@@ -38,7 +38,20 @@ $( function(){
 				$('#leader-board-base').append(html);
 
 			});
+			
+			$('#tab-leader-board').click(function(evt){
+				$('#leader-board-base').show();
+				$('#rate-now').hide();
+				$('#tab-leader-board').parent().addClass('active');
+				$('#tab-rate-now').parent().removeClass('active');
+			});
 
+			$('#tab-rate-now').click(function(evt){
+				$('#leader-board-base').hide();
+				$('#rate-now').show();
+				$('#tab-leader-board').parent().removeClass('active');
+				$('#tab-rate-now').parent().addClass('active');
+			});
 
 		},
 

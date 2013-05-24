@@ -21,27 +21,20 @@
 			<div class="container">
 				<ul class="nav nav-pills">
 					<li class="active">
-		    			<a id="tab-leader-board" href="#">Leader Board</a>
+		    			<a href="#">Leader Board</a>
 		  			</li>
 		  			<li >
-		    			<a id="tab-rate-now" href="#">Rate Now</a>
+		    			<a href="#">Rate Now</a>
 		  			</li>
 				</ul>
 
 				<div class="span12 base" >
 					<!-- base container -->
 					<div class="span1"></div>
-					<div class="span10" id="leader-board-base"><!-- <div class = "span4">
-								<div class="well cards">
-									<h2>SUBJECT NAME</h2>
-									<div class="rows">Faculty Name Is Always Big</div>
-									<div class="rows"><span class="icon-star"></span><span class="icon-star"></span></div>
-									<div class="rows"><span>2010-2014</span><span>6 - sem</span></div>
-								</div>
-							</div> --></div>
+					<div class="span10" id="leader-board-base">
 
 							
-					<div class="span10" id="rate-now">rate it out of ten</div>	
+					</div>
 				</div>
 			</div>
 			
