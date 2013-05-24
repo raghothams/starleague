@@ -19,7 +19,7 @@
 				<div class="head-colors"></div>
 			</div>
 			<div class="container">
-				<ul class="nav nav-pills">
+				<ul class="nav nav-pills tabs">
 					<li class="active">
 		    			<a id="tab-leader-board" href="#">Leader Board</a>
 		  			</li>
@@ -41,7 +41,29 @@
 							</div> --></div>
 
 							
-					<div class="span10" id="rate-now">rate it out of ten</div>	
+					<div class="span10" id="rate-now">
+						<ul class="nav nav-tabs nav-stacked" id="subject-list">
+							<!-- <li><a href="#">subj1</a></li>
+							<li><a href="#">subj1</a></li>
+							<li><a href="#">subj1</a></li> -->
+						</ul>
+
+						<div class="well">
+							<form id="form-rate">
+								<h2 id="subject-name-lbl"></h2>
+								<p id="faculty-lbl"></p>
+								<input type="text" class="input-block-level" id ="form-date" placeholder="Date dd/mm/yyyy">
+								<!-- <input type="range" class="input-block-level" id ="form-star" placeholder="Star"> -->
+								<select name="ratelist" form="form-rate" id="form-star">
+								  <option value=1>1</option>
+								  <option value=2>2</option>
+								  <option value=3>3</option>
+								  <option value=4>4</option>
+								</select>
+								<button class="btn btn-primary" id="btn-rate" type="submit">Rate</button>
+							</form>
+						</div>
+					</div>	
 				</div>
 			</div>
 			

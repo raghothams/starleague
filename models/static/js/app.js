@@ -2,20 +2,64 @@ $( function(){
 	app = {
 		init: function(){
 			var that = this;
-			$.ajax({
-				url:'http://localhost:8082/app/welcome',
+			var userinfoXHR = $.ajax({
+				url: 'http://localhost:8082/app/welcome',
 				success: function(res){
-					that.welcome = res;
+					app.userinfo = res.data;
+				},
+				error: function(req,statusText,error){
+					console.log(statusText);
 				}
-			}).error(function(req,statusText,error){console.log(statusText);});
+			});
 
-			$.ajax({
-				url:'http://192.168.43.57:8082/app/leaderboard',
+			userinfoXHR.then(function(){
+				var batchinfoXHR = $.ajax({
+					url: 'http://localhost:8082/app/batch/'+app.userinfo.batch,
+					success: function(res){
+						app.batchInfo = res.data;
+						dataRenderer.rateNow();
+					},
+					error: function(req,statusText,error){
+						console.log(statusText);
+					}
+				});
+			});
+
+			var lbXHR = $.ajax({
+				url:'http://localhost:8082/app/leaderboard',
 				success: function(res){
 					dataRenderer.leaderboardInit(res.data);
-
 				}
 			}).error(function(req,statusText,error){console.log(statusText);});
+		},
+
+		validate_rating_info: function(evt){
+			var boolSubj =false;
+			var boolDate =false;
+			var boolStar =false;
+
+			var txtSubj = $('#subject-name-lbl').text();
+			if(txtSubj && txtSubj!=0){
+				boolSubj=true;
+			}
+
+			var txtDate = $('#form-date').text();
+			if(txtDate && txtDate!=0){
+				var dates = txtDate.split('/');
+				var d = new Date(dates[2],dates[1],dates[0]);
+				if(d.getDay() == 6){
+					boolDate=true;	
+				}
+			}
+
+			var txtStar = $('#form-star').find(":selected").text();
+			if(0<int(textStar)<5){
+				boolStar = true;
+			}
+
+			if(boolSubj && boolDate && boolStar){
+				
+			}
 		}
 	}
 
@@ -29,7 +73,7 @@ $( function(){
 				resultList.push(that.flattenLBData(value));
 			});
 
-			that.leaderboard = resultList;
+			app.leaderboard = resultList;
 
 			$.each(resultList, function(index, value){
 				
@@ -75,12 +119,34 @@ $( function(){
 				html+=star;
 			}
 			return html;
+		},
+
+		rateNow: function(){
+			var subjects = app.batchInfo[0].subject_master;
+			$.each(subjects, function(index, value){
+				var html = '<li><a href="#" class="subject-row">'+value.name+'</a></li>'
+				$('#subject-list').append(html)
+			});
+			$('.subject-row').click(function(evt){
+				$('.subject-row').removeClass('active');
+				
+				$('#subject-name-lbl').text(evt.target.text);
+
+				$.each(subjects, function(index, value){
+					if(value.name == evt.target.text){
+						$('#faculty-lbl').text(value.faculty);
+					}
+				});
+				$(evt.target).addClass('active');
+			});
 		}
 	}
 
 
 
 	app.init();
+
+
 
 
 

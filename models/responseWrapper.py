@@ -18,6 +18,7 @@ class ResponseWrapper:
 		results = []
 		for item in self.data:
 			serialized = item.__str__()
+			
 			results.append(serialized)
 
 		return results

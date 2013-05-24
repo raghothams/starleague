@@ -6,6 +6,7 @@ class User:
 # 	password
 # 	batch_name
 #	email
+# 	type
 
 	def __init__(self):
 		self.name=""

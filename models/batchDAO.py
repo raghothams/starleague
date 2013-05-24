@@ -60,7 +60,6 @@ class BatchDAO:
 
 			return single_batch
 		
-		
 		return None
 
 	def get_all_running_batches(self):

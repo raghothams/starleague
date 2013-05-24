@@ -66,7 +66,7 @@ body{
 	margin-bottom: 15px;
 }
 
-.nav{
+.nav.tabs{
 	background-color:#5c9ac9;
     color:#242424;
     text-align:center;
@@ -74,22 +74,22 @@ body{
     border-radius: 0 0 5px 5px;
 }
 
-.nav-pills{
+.nav-pills.tabs{
 	text-align: center;
 }
 
-.nav-pills>li>a{
+.nav-pills.tabs>li>a{
 	color:#fefefe;
 	margin:4px;
 	font-weight: 400;
 }
 
-.nav-pills>.active>a{
+.nav-pills.tabs>.active>a{
 	color:#fefefe;
     background-color:#20476b;
 }
 
-.nav li a:hover{
+.nav.tabs li a:hover{
 	color:black;
     background-color:#f7f7ee;
     font-weight: 400;
@@ -118,6 +118,10 @@ body{
 
 #rate-now{
   display:none;
+}
+
+#form-date{
+  width:300px;
 }
 
 .foot-design{

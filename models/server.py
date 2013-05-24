@@ -14,6 +14,7 @@ from batchDAO import BatchDAO
 from sessionDAO import SessionDAO
 from userDAO import UserDAO
 from ratingDAO import RatingDAO
+from subjectMaster import SubjectMaster
 from responseWrapper import ResponseWrapper
 
 
@@ -190,8 +191,8 @@ def get_average_for_subject():
 		result = []
 		for item in sem_subjects_combo:		
 			
-			temp_result = ratings.get_average_rating_by_subject(item['subject'],item['sem'])
-			temp_result['faculty'] = item['faculty']
+			temp_result = ratings.get_average_rating_by_subject(item.get_name(),item.get_sem())
+			temp_result['faculty'] = item.get_faculty()
 			if temp_result != None:
 				result.append(temp_result)
 			else:
@@ -295,13 +296,19 @@ def present_welcome():
 		return "welcome: can't identify user...redirecting to signup"
 	else:
 		result = get_myinfo(username)
-
+		dummy_list = []
 		if result != None:
-			wrapped_response = ResponseWrapper()
-			wrapped_response.set_error(False)
-			wrapped_response.set_data([result])
-			
-			json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+			# dummy_list.append(result)
+			# wrapped_response = ResponseWrapper()
+			# wrapped_response.set_error(False)
+			# wrapped_response.set_data(dummy_list)
+			wrapper_response = { 
+								'error':False,
+								'data':result
+			}
+			# json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+			json_result = json.dumps(wrapper_response)
+			bottle.response.content_type="application/json"
 			return json_result
 		else:
 			wrapped_response = ResponseWrapper()
@@ -354,8 +361,8 @@ def get_current_sem_subjects(batch_cursor):
 
 		for subject_item in subject_list:
 			if subject_item['sem'] == current_sem:
-				# subject = SubjectMaster(subject_item['name'], subject_item['faculty'], subject_item['sem'])
-				result.append({'subject': subject_item['name'], 'sem':subject_item['sem'], 'faculty':subject_item['faculty']})
+				subject = SubjectMaster(subject_item['name'], subject_item['faculty'], subject_item['sem'])
+				result.append(subject)
 
 	return result
 
@@ -372,14 +379,14 @@ def get_myinfo(username):
 			current_sem = batch_result.get_current_sem()
 
 			if current_sem != None:
-				result = {
-							'username': user_result['_id'],
-							'batch' : user_result['batch'],
-							'current_sem' : current_sem,
-							'type' : user_result['type']
-						}
-
-				return result
+				# temp_user = User("",user_result['_id'],"",user_result['batch'],user_result['type'])
+				temp_user = {
+								'username':user_result['_id'],
+								'batch':user_result['batch'],
+								'type':user_result['type'],
+								'current_sem':current_sem
+							}
+				return temp_user
 	return None
 
 
@@ -396,4 +403,4 @@ sessions = SessionDAO(database)
 ratings = RatingDAO(database)
 
 bottle.debug(True)
-bottle.run(host='0.0.0.0',port=8082)
+bottle.run(host='localhost',port=8082)
