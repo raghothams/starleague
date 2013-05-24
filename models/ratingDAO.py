@@ -1,6 +1,7 @@
 __author__ = 'raghothams'
 
 from rating import Rating
+from bson.son import SON
 # import pymongo
 
 class RatingDAO:
@@ -108,7 +109,8 @@ class RatingDAO:
 
 		collection = self.rating_collection
 		result = collection.aggregate([
-				{"$group":{"_id":{"subject":"$subject_name","sem":"$sem"}, "avg":{"$avg":"$star"}}}
+				{"$group":{"_id":{"subject":"$subject_name", "sem":"$sem", "batch":"$batch"}, "avg":{"$avg":"$star"}}},
+				{"$sort": SON({"avg":-1})}
 			])
 
 		return result
@@ -124,7 +126,8 @@ class RatingDAO:
 		collection = self.rating_collection
 		result = collection.aggregate([
 				{"$match":{"subject_name":subject_name, "sem":int(semno)}},
-				{"$group":{"_id":{"subject":"$subject_name","sem":"$sem"}, "avg":{"$avg":"$star"}}}
+				{"$group":{"_id":{"subject":"$subject_name", "sem":"$sem", "batch":"$batch"}, "avg":{"$avg":"$star"}}},
+				{"$sort": SON({"avg":-1})}
 			])
 		# print result
 		return result

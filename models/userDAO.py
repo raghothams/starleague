@@ -75,3 +75,19 @@ class UserDAO:
 			return False
 
 		return True
+
+	def get_user_by_id(self, uname):
+		user = None
+		try:
+			collection = self.user_collection
+			user = collection.find_one({"_id":uname})
+
+		except Exception as inst:
+			print "error finding user"
+			print inst
+
+		if user is None:
+			print "User not in database"
+			return None
+		else:
+			return user

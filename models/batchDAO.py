@@ -37,6 +37,7 @@ class BatchDAO:
 			single_batch.set_desc(item['desc'])
 			single_batch.set_current_sem(item['current_sem'])
 			single_batch.set_subject_array(self.construct_subject_master(item))
+			single_batch.set_status(item['status'])
 
 			batches.append(single_batch)
 
@@ -55,6 +56,7 @@ class BatchDAO:
 			single_batch.set_desc(item['desc'])
 			single_batch.set_current_sem(item['current_sem'])
 			single_batch.set_subject_array(self.construct_subject_master(item))
+			single_batch.set_status(item['status'])
 
 			return single_batch
 		
@@ -76,11 +78,11 @@ class BatchDAO:
 		subjects = pymongo_batch['subject_master']
 		
 		for item in subjects:
-			modelled_subject = SubjectMaster()
+			modelled_subject = SubjectMaster(item['name'], item['faculty'], item['sem'])
 			
-			modelled_subject.set_name(item['name'])
-			modelled_subject.set_sem(item['sem'])
-			modelled_subject.set_faculty(item['faculty'])
+			# modelled_subject.set_name(item['name'])
+			# modelled_subject.set_sem(item['sem'])
+			# modelled_subject.set_faculty(item['faculty'])
 
 			modelled_subject_master_array.append(modelled_subject)
 

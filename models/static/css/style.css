@@ -1,0 +1,79 @@
+body{
+	margin: 0 auto;
+	font-family: 'Noto Sans', sans-serif;
+	font-size: 1.3rem;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -60px;
+}
+
+#footer{
+	height: 60px;
+}
+
+.page-header{
+	margin: 0;
+	text-align: center;
+	background-color: #336699;
+	color: #f8fdff;
+	border-bottom: 4px solid #20476b;
+	font-family: 'Noto Sans', sans-serif;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 3rem;
+}
+
+.page-header h1{
+	margin-top: 0;
+	padding-top: 10px;
+}
+
+.form-signin{
+	margin : 0 auto 20px;
+	max-width: 300px;
+	border-radius: 5px;
+	border: 1px solid #e5e5e5;
+	background-color: #f5f5f5;
+	padding: 19px 29px 29px;
+}
+
+.form-signin-header{
+	font-weight: bolder;
+	margin-bottom: 15px;
+}
+
+.form-signin input{
+	margin-bottom: 15px;
+}
+
+.nav{
+	background-color:#5c9ac9;
+    color:#242424;
+    text-align:center;
+    padding:10px 10px 0 10px;
+}
+
+.nav-pills>li>a{
+	color:#fefefe;
+	margin:4px;
+	font-weight: 400;
+}
+
+.nav-pills>.active>a{
+	color:#fefefe;
+    background-color:#20476b;
+}
+
+.nav li a:hover{
+	color:black;
+    background-color:#efefef;
+    font-weight: 400;
+}
+
+.content{
+	/*background-color: #efefef;*/
+}

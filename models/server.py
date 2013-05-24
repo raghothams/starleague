@@ -7,6 +7,7 @@ import bottle
 import re	#regex
 import cgi	#used for content type, length, form etc
 import json
+import operator
 from user import User
 from batch import Batch
 from batchDAO import BatchDAO
@@ -15,13 +16,30 @@ from userDAO import UserDAO
 from ratingDAO import RatingDAO
 from responseWrapper import ResponseWrapper
 
-@bottle.get('/serverTest')
+
+@bottle.route('/index.html')
+def render_index():
+	return bottle.template('index')
+
+@bottle.route('/welcome.html')
+def render_welcome():
+	return bottle.template('welcome')
+
+@bottle.route('/signup.html')
+def render_signup():
+	return bottle.template('signup')
+
+@bottle.route('/static/<filename:path>', name='static')
+def static_server(filename):
+	return bottle.static_file(filename, root='static')
+
+@bottle.get('/app/servertest')
 def server_test():
 
 	bottle.response.content_type = "application/json"
-	return "{'status':'true'}"
+	return '{"status":true}'
 
-@bottle.get('/batch')
+@bottle.get('/app/batch')
 # get all batches
 def get_batches():
 	result = batches.get_all_batches()
@@ -33,23 +51,23 @@ def get_batches():
 
 	if result != None :
 		wrapped_response.set_data(result)
-		wrapped_response.set_error("false")
+		wrapped_response.set_error(False)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 	
 	else:
-		wrapped_response.set_error("true")
+		wrapped_response.set_error(True)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
 	return json_result
 
 
-@bottle.get('/signup')
+@bottle.get('/app/signup')
 def render_singup():
 	return "signup with username and password"
 
 
 
-@bottle.get('/batch/<batchid>')
+@bottle.get('/app/batch/<batchid>')
 # get the specified batch
 def get_batch(batchid):
 	
@@ -62,17 +80,37 @@ def get_batch(batchid):
 	
 	if result != None :
 		wrapped_response.set_data(array)
-		wrapped_response.set_error("false")
+		wrapped_response.set_error(False)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 	
 	else:
-		wrapped_response.set_error("true")
+		wrapped_response.set_error(True)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
 	return json_result
 
+@bottle.get('/app/myinfo')
+def app_info():
+	result = get_myinfo()
+	
+	if result != None:
+		wrapped_response = ResponseWrapper()
+		wrapped_response.set_error(False)
+		wrapped_response.set_data(result)
 
-@bottle.get('/myratings')
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+		return json_result
+
+	else:
+		wrapped_response = ResponseWrapper()
+		wrapped_response.set_error(True)
+		wrapped_response.set_data([])
+
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+		return json_result
+
+
+@bottle.get('/app/myratings')
 def get_myratings():
 
 	cookie = bottle.request.get_cookie("session")
@@ -85,17 +123,17 @@ def get_myratings():
 
 	if result != None :
 		wrapped_response.set_data(result)
-		wrapped_response.set_error("false")
+		wrapped_response.set_error(False)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 	
 	else:
-		wrapped_response.set_error("true")
+		wrapped_response.set_error(True)
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
 	bottle.response.content_type = "application/json"
 	return json_result
 
-@bottle.get('/myratings/sem/<semno>')
+@bottle.get('/app/myratings/sem/<semno>')
 def get_myratings_by_sem(semno):
 
 	cookie = bottle.request.get_cookie("session")
@@ -119,7 +157,7 @@ def get_myratings_by_sem(semno):
 	return json_result
 
 
-@bottle.get('/leaderboard/subject/<subj>/sem/<semno>')
+@bottle.get('/app/leaderboard/subject/<subj>/sem/<semno>')
 def get_average_for_subject(subj, semno):
 
 	result = ratings.get_average_rating_by_subject(subj, semno)
@@ -138,7 +176,7 @@ def get_average_for_subject(subj, semno):
 	return json.dumps(serialized)
 
 
-@bottle.get('/leaderboard')
+@bottle.get('/app/leaderboard')
 def get_average_for_subject():
 	# get current sem for each batch.
 	# get average ratings for all subjects in current sem
@@ -153,13 +191,18 @@ def get_average_for_subject():
 		for item in sem_subjects_combo:		
 			
 			temp_result = ratings.get_average_rating_by_subject(item['subject'],item['sem'])
-			
+			temp_result['faculty'] = item['faculty']
 			if temp_result != None:
 				result.append(temp_result)
 			else:
 				serialized = { "error":True,
 						"data":""
 					}
+		# sort the results
+		# sorted(student_tuples, key=lambda student: student[2]) 
+		# print result
+		# sorted_list = sorted(result, key=lambda item: item.result[0].avg)
+		# print sorted_list
 
 		serialized = { "error":False,
 						"data":result
@@ -169,26 +212,13 @@ def get_average_for_subject():
 						"data":""
 					}	
 
-	print json.dumps(serialized)
+	# print json.dumps(serialized)
+	bottle.response.content_type = "application/json"
+	return json.dumps(serialized)
 
-
-	
-	
-	# if result != None:
-	# 	serialized = { "error":False,
-	# 				"data":result
-	# 			}
-	# else:
-	# 	serialized = { "error":True,
-	# 				"data":""
-	# 			}
-
-	# bottle.response.content_type = "application/json"
-	# return json.dumps(serialized)
-	return "hi"
 
 # handles a login request
-@bottle.post('/login')
+@bottle.post('/app/login')
 def process_login():
 
     username = bottle.request.forms.get("username")
@@ -222,7 +252,7 @@ def process_login():
 
 
 
-@bottle.post('/signup')
+@bottle.post('/app/signup')
 def process_signup():
 
 	email = bottle.request.forms.get("email")
@@ -254,17 +284,34 @@ def process_signup():
 
 
 
-@bottle.get("/welcome")
+@bottle.get("/app/welcome")
 def present_welcome():
 	# check for a cookie, if present, then extract value
 
 	cookie = bottle.request.get_cookie("session")
 	username = sessions.get_username(cookie)  # see if user is logged in
 	if username is None:
-		print "welcome: can't identify user...redirecting to signup"
+		# print "welcome: can't identify user...redirecting to signup"
 		return "welcome: can't identify user...redirecting to signup"
+	else:
+		result = get_myinfo(username)
 
-	return "success - username", username
+		if result != None:
+			wrapped_response = ResponseWrapper()
+			wrapped_response.set_error(False)
+			wrapped_response.set_data([result])
+			
+			json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+			return json_result
+		else:
+			wrapped_response = ResponseWrapper()
+			wrapped_response.set_error(True)
+			wrapped_response.set_data([])
+
+			json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+			return json_result
+
+	
 
 
 # Helper Functions
@@ -308,9 +355,35 @@ def get_current_sem_subjects(batch_cursor):
 		for subject_item in subject_list:
 			if subject_item['sem'] == current_sem:
 				# subject = SubjectMaster(subject_item['name'], subject_item['faculty'], subject_item['sem'])
-				result.append({'subject': subject_item['name'], 'sem':subject_item['sem']})
+				result.append({'subject': subject_item['name'], 'sem':subject_item['sem'], 'faculty':subject_item['faculty']})
 
 	return result
+
+def get_myinfo(username):
+
+	# get username, batch, type from users
+	# get current sem from batches
+	user_result = users.get_user_by_id(username)
+
+	if user_result != None:
+		batch_result = batches.get_batch_by_id(user_result['batch'])
+
+		if batch_result != None:
+			current_sem = batch_result.get_current_sem()
+
+			if current_sem != None:
+				result = {
+							'username': user_result['_id'],
+							'batch' : user_result['batch'],
+							'current_sem' : current_sem,
+							'type' : user_result['type']
+						}
+
+				return result
+	return None
+
+
+
 
 
 connection_string = "mongodb://localhost"
