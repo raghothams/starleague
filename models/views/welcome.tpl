@@ -60,7 +60,8 @@
 								  <option value=3>3</option>
 								  <option value=4>4</option>
 								</select>
-								<button class="btn btn-primary" id="btn-rate" type="submit">Rate</button>
+								<!-- <button class="btn btn-primary" id="btn-rate" type="button">Rate</button> -->
+								<input type="button" class="btn btn-primary" value="Rate" id="btn-rate">
 							</form>
 						</div>
 					</div>	

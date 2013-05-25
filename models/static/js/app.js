@@ -43,22 +43,40 @@ $( function(){
 				boolSubj=true;
 			}
 
-			var txtDate = $('#form-date').text();
+			var txtDate = $('#form-date').val();
 			if(txtDate && txtDate!=0){
 				var dates = txtDate.split('/');
-				var d = new Date(dates[2],dates[1],dates[0]);
+				var d = new Date(dates[2],parseInt(dates[1])-1,dates[0]);
 				if(d.getDay() == 6){
 					boolDate=true;	
 				}
 			}
 
 			var txtStar = $('#form-star').find(":selected").text();
-			if(0<int(textStar)<5){
+			if(0<parseInt(txtStar)<5){
 				boolStar = true;
 			}
 
 			if(boolSubj && boolDate && boolStar){
+				data = {};
+				data.date = txtDate.replace('/','_').replace('/','_'); // bad hack
+				data.subject = txtSubj;
+				data.sem = app.userinfo.current_sem;
+				data.star = parseInt(txtStar);
+				data.user = app.userinfo.username;
+				data.batch = app.userinfo.batch;
 				
+				$.ajax({
+				  type: "POST",
+				  url: "http://localhost:8082/app/rating",
+				  data: data,
+				  success: function(response){
+				  				console.log('successfully submitted rating');
+				  			},
+				  error: function(error, status){
+				  				console.log(status);
+				  			}
+				});
 			}
 		}
 	}
@@ -82,6 +100,8 @@ $( function(){
 				$('#leader-board-base').append(html);
 
 			});
+
+			$('#btn-rate').click(function(evt){app.validate_rating_info(evt);});
 			
 			$('#tab-leader-board').click(function(evt){
 				$('#leader-board-base').show();

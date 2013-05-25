@@ -93,10 +93,16 @@ class RatingDAO:
 		
 
 	def insert_Rating(self, rating):
-		
-		collection = self.rating_collection
-		# print(Rating.__str__())
-		result = collection.insert(rating.__str__(False))
+		try:
+			collection = self.rating_collection
+			to_insert = rating.__str__()
+			print to_insert
+			result = collection.insert(to_insert)
+		except e:
+			print "error occurred while inserting"
+			print e
+			return None
+
 		return result
 
 
@@ -126,8 +132,12 @@ class RatingDAO:
 		collection = self.rating_collection
 		result = collection.aggregate([
 				{"$match":{"subject_name":subject_name, "sem":int(semno)}},
-				{"$group":{"_id":{"subject":"$subject_name", "sem":"$sem", "batch":"$batch"}, "avg":{"$avg":"$star"}}},
-				{"$sort": SON({"avg":-1})}
+				{"$group":{"_id":{"subject":"$subject_name", "sem":"$sem", "batch":"$batch"}, "avg":{"$avg":"$star"}}}
 			])
 		# print result
 		return result
+
+		# date, subject, sem, user combo
+	def check_entry(self,date, subject, sem, user):
+		collection = self.rating_collection
+		result = collection.findOne({""});

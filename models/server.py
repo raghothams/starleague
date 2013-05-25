@@ -10,6 +10,7 @@ import json
 import operator
 from user import User
 from batch import Batch
+from rating import Rating
 from batchDAO import BatchDAO
 from sessionDAO import SessionDAO
 from userDAO import UserDAO
@@ -204,7 +205,7 @@ def get_average_for_subject():
 		# print result
 		# sorted_list = sorted(result, key=lambda item: item.result[0].avg)
 		# print sorted_list
-
+		print result
 		serialized = { "error":False,
 						"data":result
 					}
@@ -283,6 +284,35 @@ def process_signup():
 		print "user did not validate"
 		return bottle.template("signup", errors)
 
+@bottle.post('/app/rating')
+def insert_rating():
+	# 1. check for session & user
+	# 2. check for date, subject, sem, user combo before insert to prevent duplicates
+	# 3. insert
+	# 4. response
+
+	subject_name = bottle.request.forms.get("subject")
+	date = bottle.request.forms.get("date")
+	sem = bottle.request.forms.get("sem")
+	star = bottle.request.forms.get("star")
+	batch = bottle.request.forms.get("batch")
+
+	cookie = bottle.request.get_cookie("session")
+	username = sessions.get_username(cookie)  # see if user is logged in
+	if username is None:
+		# print "welcome: can't identify user...redirecting to signup"
+		return "welcome: can't identify user...redirecting to signup"
+	else:
+
+		subject_rating = Rating(subject_name,date,batch,username,sem,star)
+		subject_rating.set_date(date)
+
+		result = ratings.insert_Rating(subject_rating)
+		if result == None:
+			return "error occurred"
+		else:
+			print result
+	return result
 
 
 @bottle.get("/app/welcome")

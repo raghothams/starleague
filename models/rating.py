@@ -19,6 +19,15 @@ class Rating:
 		self.batch_name = ""
 		self.username = ""
 		self.sem = -1
+		self.star = -1
+
+	def __init__(self, subj_name, date, batch, user, sem, star):
+		self.name = subj_name
+		self.date = date
+		self.batch_name = batch
+		self.username = user
+		self.sem = sem
+		self.star = star
 
 	def set_star(self,number):
 		self.star = number
@@ -35,8 +44,9 @@ class Rating:
 	# TO PASS DATE AS YYYY_MM_DD FORMAT
 	def set_date(self, date_no):
 		dates = date_no.split('_')
-		self.date = datetime.datetime(dates[0],dates[1],dates[2])
+		self.date = datetime.datetime(int(dates[2]),int(dates[1]),int(dates[0]))
 		# self.date = date_no
+		
 
 
 	def set_username(self, uname):
@@ -64,15 +74,15 @@ class Rating:
 
 		date_format = None
 		if date_as_string:
-			date_format = self.date.strf("%H_%m_%d")
+			date_format = self.date.strftime("%Y_%m_%d")
 		else:
 			date_format = self.date
 		jsoned = {
-					"subject_name" : self.get_name(),
-					"star" : self.get_star(),
-					"date" : date_format,
-					"batch" : self.get_batch(),
-					"user" : self.get_username(),
-					"sem" : self.get_sem()
+					'subject_name' : self.get_name(),
+					'star' : self.get_star(),
+					'date' : date_format,
+					'batch' : self.get_batch(),
+					'user' : self.get_username(),
+					'sem' : int(self.get_sem())
 				}
 		return jsoned
