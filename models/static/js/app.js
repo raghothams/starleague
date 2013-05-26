@@ -131,17 +131,18 @@ $( function(){
 				$('#tab-rate-now').parent().addClass('active');
 			});
 
-			$('#tab-logout').click(function(evt){
-				$.ajax({
-					url: 'http://localhost:8082/app/logout',
-					success: function(res){
-						app.userinfo = res.data;
-					},
-					error: function(req,statusText,error){
-						console.log(statusText);
-					}
-				});			
-			});
+			// $('#tab-logout').click(function(evt){
+			// 	$.ajax({
+			// 		url: 'http://localhost:8082/app/logout',
+			// 		dataType: "html"
+			// 		// success: function(res){
+			// 		// 	app.userinfo = res.data;
+			// 		// },
+			// 		error: function(req,statusText,error){
+			// 			console.log(statusText);
+			// 		}
+			// 	});			
+			// });
 
 		},
 

@@ -27,7 +27,7 @@
 		    			<a id="tab-rate-now" href="#">Rate Now</a>
 		  			</li>
 		  			<li class="pull-right">
-		    			<a id="tab-logout" href="#">Logout</a>
+		    			<a id="tab-logout" href="/logout">Logout</a>
 		  			</li>
 				</ul>
 
