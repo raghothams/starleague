@@ -6,14 +6,36 @@ $( function(){
 				url: 'http://localhost:8082/app/welcome',
 				success: function(res){
 					app.userinfo = res.data;
+					that.requestLeaderBoard();
 				},
 				error: function(req,statusText,error){
 					console.log(statusText);
 				}
 			});
 
-			userinfoXHR.then(function(){
-				var batchinfoXHR = $.ajax({
+			// userinfoXHR.then(function(){
+			// 	var batchinfoXHR = $.ajax({
+			// 		url: 'http://localhost:8082/app/batch/'+app.userinfo.batch,
+			// 		success: function(res){
+			// 			app.batchInfo = res.data;
+			// 			dataRenderer.rateNow();
+			// 		},
+			// 		error: function(req,statusText,error){
+			// 			console.log(statusText);
+			// 		}
+			// 	});
+			// });
+
+			var lbXHR = $.ajax({
+				url:'http://localhost:8082/app/leaderboard',
+				success: function(res){
+					dataRenderer.leaderboardInit(res.data);
+				}
+			}).error(function(req,statusText,error){console.log(statusText);});
+		},
+
+		requestLeaderBoard : function(){
+			var batchinfoXHR = $.ajax({
 					url: 'http://localhost:8082/app/batch/'+app.userinfo.batch,
 					success: function(res){
 						app.batchInfo = res.data;
@@ -23,14 +45,6 @@ $( function(){
 						console.log(statusText);
 					}
 				});
-			});
-
-			var lbXHR = $.ajax({
-				url:'http://localhost:8082/app/leaderboard',
-				success: function(res){
-					dataRenderer.leaderboardInit(res.data);
-				}
-			}).error(function(req,statusText,error){console.log(statusText);});
 		},
 
 		validate_rating_info: function(evt){
@@ -115,6 +129,18 @@ $( function(){
 				$('#rate-now').show();
 				$('#tab-leader-board').parent().removeClass('active');
 				$('#tab-rate-now').parent().addClass('active');
+			});
+
+			$('#tab-logout').click(function(evt){
+				$.ajax({
+					url: 'http://localhost:8082/app/logout',
+					success: function(res){
+						app.userinfo = res.data;
+					},
+					error: function(req,statusText,error){
+						console.log(statusText);
+					}
+				});			
 			});
 
 		},

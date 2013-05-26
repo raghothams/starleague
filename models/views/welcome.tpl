@@ -26,6 +26,9 @@
 		  			<li >
 		    			<a id="tab-rate-now" href="#">Rate Now</a>
 		  			</li>
+		  			<li class="pull-right">
+		    			<a id="tab-logout" href="#">Logout</a>
+		  			</li>
 				</ul>
 
 				<div class="span12 base" >
@@ -59,6 +62,7 @@
 								  <option value=2>2</option>
 								  <option value=3>3</option>
 								  <option value=4>4</option>
+								  <option value=5>5</option>
 								</select>
 								<!-- <button class="btn btn-primary" id="btn-rate" type="button">Rate</button> -->
 								<input type="button" class="btn btn-primary" value="Rate" id="btn-rate">

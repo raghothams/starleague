@@ -49,11 +49,11 @@ class SessionDAO:
     def end_session(self, session_id):
 
         if session_id is None:
-            return
+            return None
 
-        self.sessions.remove({'_id': session_id})
+        result = self.sessions.remove({'_id': session_id})
 
-        return
+        return result
 
     # if there is a valid session, it is returned
     def get_session(self, session_id):

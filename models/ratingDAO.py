@@ -130,8 +130,9 @@ class RatingDAO:
 	def get_average_rating_by_subject(self, subject_name, semno):
 
 		collection = self.rating_collection
+		# db.ratings.aggregate({$group:{_id:{'subject':'$subject_name','sem':'$sem','batch':'$batch'},star_sum:{$sum:'$star'},star_avg:{$avg:'$star'}}})
 		result = collection.aggregate([
-				{"$match":{"subject_name":subject_name, "sem":int(semno)}},
+				{"$match":{"subject_name":subject_name,"sem":semno}},
 				{"$group":{"_id":{"subject":"$subject_name", "sem":"$sem", "batch":"$batch"}, "avg":{"$avg":"$star"}}}
 			])
 		# print result
@@ -140,4 +141,9 @@ class RatingDAO:
 		# date, subject, sem, user combo
 	def check_entry(self,date, subject, sem, user):
 		collection = self.rating_collection
-		result = collection.findOne({""});
+		result = collection.find_one({"subject_name":subject,"date":date,"sem":sem,"user":user});
+
+		if result == None:
+			return False
+		else:
+			return True

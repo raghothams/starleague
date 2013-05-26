@@ -26,11 +26,11 @@ class Rating:
 		self.date = date
 		self.batch_name = batch
 		self.username = user
-		self.sem = sem
-		self.star = star
+		self.sem = int(sem)
+		self.star = int(star)
 
 	def set_star(self,number):
-		self.star = number
+		self.star = int(number)
 			
 	def get_star(self):
 	# 	ideally read star from mongo
@@ -53,7 +53,7 @@ class Rating:
 		self.username = uname
 
 	def set_sem(self, semno):
-		self.sem = semno
+		self.sem = int(semno)
 
 	def get_date(self):
 		return self.date
@@ -74,7 +74,7 @@ class Rating:
 
 		date_format = None
 		if date_as_string:
-			date_format = self.date.strftime("%Y_%m_%d")
+			date_format = self.date.strftime("%d_%m_%Y")
 		else:
 			date_format = self.date
 		jsoned = {
@@ -83,6 +83,9 @@ class Rating:
 					'date' : date_format,
 					'batch' : self.get_batch(),
 					'user' : self.get_username(),
-					'sem' : int(self.get_sem())
+					'sem' : self.get_sem()
 				}
 		return jsoned
+
+		# db.ratings.aggregate({$match:{'subject_name':'s/w arch','sem':6}},{$group:{_id:{'subject':'$subject_name','sem':'$sem'},sum:{$sum:'$star'}}},{$group:{_id:{'subject':'$_id.subject','sem':'$_id.sem'},avg:{$avg:'$sum'}}})
+		# db.ratings.aggregate({$group:{_id:{'subject':'$subject_name','sem':'$sem','batch':'$batch'},star_sum:{$sum:'$star'},star_avg:{$avg:'$star'}}})

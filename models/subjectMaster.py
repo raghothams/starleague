@@ -3,7 +3,7 @@ __author__ = 'raghothams'
 # SubjectMaster
 # 	name
 # 	faculty
-# 	semA
+# 	sem
 
 import json
 

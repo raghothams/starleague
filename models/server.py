@@ -18,14 +18,25 @@ from ratingDAO import RatingDAO
 from subjectMaster import SubjectMaster
 from responseWrapper import ResponseWrapper
 
-
+@bottle.route('/')
 @bottle.route('/index.html')
 def render_index():
 	return bottle.template('index')
 
 @bottle.route('/welcome.html')
 def render_welcome():
-	return bottle.template('welcome')
+	cookie = bottle.request.get_cookie("session")
+	print "cookie : ",cookie
+	if cookie != None:
+		username = sessions.get_username(cookie)  # see if user is logged in
+		print "user : ",username
+		if username != None:
+			return bottle.template('welcome')
+		else:
+			bottle.redirect('/index.html')
+	else:
+		bottle.redirect('/index.html')	
+	
 
 @bottle.route('/signup.html')
 def render_signup():
@@ -182,45 +193,52 @@ def get_average_for_subject(subj, semno):
 def get_average_for_subject():
 	# get current sem for each batch.
 	# get average ratings for all subjects in current sem
+	cookie = bottle.request.get_cookie("session")
+	username = sessions.get_username(cookie)  # see if user is logged in
+	if username is None:
+		# print "welcome: can't identify user...redirecting to signup"
+		bottle.redirect('/')
 
-	serialized = None
-	running_batches = batches.get_all_running_batches()
-	sem_subjects_combo = get_current_sem_subjects(running_batches)
-	# print sem_subjects_combo
-	if sem_subjects_combo != None:
-
-		result = []
-		for item in sem_subjects_combo:		
-			
-			temp_result = ratings.get_average_rating_by_subject(item.get_name(),item.get_sem())
-			temp_result['faculty'] = item.get_faculty()
-			if temp_result != None:
-				result.append(temp_result)
-			else:
-				serialized = { "error":True,
-						"data":""
-					}
-		# sort the results
-		# sorted(student_tuples, key=lambda student: student[2]) 
-		# print result
-		# sorted_list = sorted(result, key=lambda item: item.result[0].avg)
-		# print sorted_list
-		print result
-		serialized = { "error":False,
-						"data":result
-					}
 	else:
-			serialized = { "error":True,
-						"data":""
-					}	
 
-	# print json.dumps(serialized)
-	bottle.response.content_type = "application/json"
-	return json.dumps(serialized)
+		serialized = None
+		running_batches = batches.get_all_running_batches()
+		sem_subjects_combo = get_current_sem_subjects(running_batches)
+		# print sem_subjects_combo
+		if sem_subjects_combo != None:
+
+			result = []
+			for item in sem_subjects_combo:		
+				
+				temp_result = ratings.get_average_rating_by_subject(item.get_name(),item.get_sem())
+				temp_result['faculty'] = item.get_faculty()
+				if temp_result != None:
+					result.append(temp_result)
+				else:
+					serialized = { "error":True,
+							"data":""
+						}
+			# sort the results
+			# sorted(student_tuples, key=lambda student: student[2]) 
+			# print result
+			# sorted_list = sorted(result, key=lambda item: item.result[0].avg)
+			# print sorted_list
+			print result
+			serialized = { "error":False,
+							"data":result
+						}
+		else:
+				serialized = { "error":True,
+							"data":""
+						}	
+
+		# print json.dumps(serialized)
+		bottle.response.content_type = "application/json"
+		return json.dumps(serialized)
 
 
 # handles a login request
-@bottle.post('/app/login')
+@bottle.post('/login')
 def process_login():
 
     username = bottle.request.forms.get("username")
@@ -243,8 +261,8 @@ def process_login():
         # not getting set on the redirect, you are probably using the experimental version of bottle (.12).
         # revert to .11 to solve the problem.
         bottle.response.set_cookie("session", cookie)
-        return "success logging in"
-        # bottle.redirect("/welcome")
+        
+        bottle.redirect("/welcome.html")
 
     else:
         # return bottle.template("login",
@@ -252,6 +270,16 @@ def process_login():
         #                             login_error="Invalid Login"))
 		return "error logging in"
 
+
+
+@bottle.get('/app/logout')
+def process_signout():
+	cookie = bottle.request.get_cookie("session")
+	sessions.end_session(cookie)
+
+	bottle.response.set_cookie("session", "")
+
+	bottle.redirect("/app/")
 
 
 @bottle.post('/app/signup')
@@ -303,16 +331,19 @@ def insert_rating():
 		# print "welcome: can't identify user...redirecting to signup"
 		return "welcome: can't identify user...redirecting to signup"
 	else:
+		isDuplicate = ratings.check_entry(date, subject_name, int(sem), username)
 
-		subject_rating = Rating(subject_name,date,batch,username,sem,star)
-		subject_rating.set_date(date)
+		if not isDuplicate:
+			subject_rating = Rating(subject_name,date,batch,username,sem,star)
+			subject_rating.set_date(date)
 
-		result = ratings.insert_Rating(subject_rating)
-		if result == None:
-			return "error occurred"
+			result = ratings.insert_Rating(subject_rating)
+			if result == None:
+				return "error occurred"
+			else:
+				print result
 		else:
-			print result
-	return result
+			return "{'data':{},'error':'duplicate entry error'}"
 
 
 @bottle.get("/app/welcome")
@@ -323,7 +354,7 @@ def present_welcome():
 	username = sessions.get_username(cookie)  # see if user is logged in
 	if username is None:
 		# print "welcome: can't identify user...redirecting to signup"
-		return "welcome: can't identify user...redirecting to signup"
+		bottle.redirect('/')
 	else:
 		result = get_myinfo(username)
 		dummy_list = []

@@ -16,10 +16,10 @@
 			<h1>Star League</h1>
 		</div>
 
-		<form class="form-signin">
+		<form class="form-signin" action="/login" method="post">
 			<h2> Sign in</h2>
-			<input type="text" class="input-block-level" id ="form-username" placeholder="Username">
-			<input type="password" class="input-block-level" id ="form-username" placeholder="Password">
+			<input type="text" name="username" class="input-block-level" id ="form-username" placeholder="Username">
+			<input type="password" name="password" class="input-block-level" id ="form-username" placeholder="Password">
 			<button class="btn btn-primary" type="submit">Sign in</button>
 		</form>
 
