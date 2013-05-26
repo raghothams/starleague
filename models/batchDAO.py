@@ -44,6 +44,18 @@ class BatchDAO:
 		# print json.dumps(batches, default=Batch.__str__)
 		return batches
 
+	def get_all_batch_ids(self):
+
+		collection = self.batch_coll
+		result = collection.find({},{"_id":True})
+
+		batches = []
+		for item in result:
+			temp_batch ={"id":item["_id"]}
+			batches.append(temp_batch)
+
+		return batches
+
 	def get_batch_by_id(self, batchid):
 
 		collection = self.batch_coll

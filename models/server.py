@@ -21,7 +21,21 @@ from responseWrapper import ResponseWrapper
 @bottle.route('/')
 @bottle.route('/index.html')
 def render_index():
-	return bottle.template('index')
+	cookie = bottle.request.get_cookie("session")
+	
+	print "cookie : ",cookie
+	if cookie != None:
+		username = sessions.get_username(cookie)  # see if user is logged in
+		print "user : ",username
+		if username != None:
+			bottle.redirect('/welcome.html')
+		else:
+			sessions.end_session(cookie)
+			result = batches.get_all_batch_ids()
+			return bottle.template('index', signup_errors = None, batch_list = result)
+	else:
+		result = batches.get_all_batch_ids()
+		return bottle.template('index', signup_errors = None, batch_list = result)
 
 @bottle.route('/welcome.html')
 def render_welcome():
@@ -72,12 +86,23 @@ def get_batches():
 		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
 	return json_result
+@bottle.get('/app/batch/id')
+# get all batches
+def get_batch_ids():
+	result = batches.get_all_batch_ids()
+	wrapped_response = ResponseWrapper()
+	bottle.response.content_type = "application/json"
 
+	if result != None:
+		wrapped_response.set_data(result)
+		wrapped_response.set_error(False)
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
+	
+	else:
+		wrapped_response.set_error(True)
+		json_result = json.dumps(wrapped_response, default=ResponseWrapper.__str__)
 
-@bottle.get('/app/signup')
-def render_singup():
-	return "signup with username and password"
-
+	return json_result
 
 
 @bottle.get('/app/batch/<batchid>')
@@ -282,7 +307,7 @@ def process_signout():
 	bottle.redirect("/app/")
 
 
-@bottle.post('/app/signup')
+@bottle.post('/signup')
 def process_signup():
 
 	email = bottle.request.forms.get("email")
@@ -291,7 +316,10 @@ def process_signup():
 	verify = bottle.request.forms.get("verify")
 	batch = bottle.request.forms.get("batch")
 	user_type = bottle.request.forms.get("type")
+	result = batches.get_all_batch_ids()
 
+	if user_type == None:
+		user_type = "student"
 
     # set these up in case we have an error case
 	errors = {'username': cgi.escape(username), 'email': cgi.escape(email)}
@@ -302,15 +330,15 @@ def process_signup():
 		if not users.add_user(temp_user):
 			# this was a duplicate
 			errors['username_error'] = "Username already in use. Please choose another"
-			return bottle.template("signup", errors)
+			return bottle.template("index", signup_errors = errors, batch_list = result)
 
 		session_id = sessions.start_session(username)
 		print session_id
 		bottle.response.set_cookie("session", session_id)
-		bottle.redirect("/welcome")
+		bottle.redirect("/welcome.html")
 	else:
 		print "user did not validate"
-		return bottle.template("signup", errors)
+		return bottle.template("index", signup_errors = errors, batch_list = result)
 
 @bottle.post('/app/rating')
 def insert_rating():
