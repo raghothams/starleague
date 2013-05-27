@@ -3,7 +3,7 @@ $( function(){
 		init: function(){
 			var that = this;
 			var userinfoXHR = $.ajax({
-				url: 'http://localhost:8082/app/welcome',
+				url: '/app/welcome',
 				success: function(res){
 					app.userinfo = res.data;
 					that.requestLeaderBoard();
@@ -27,7 +27,7 @@ $( function(){
 			// });
 
 			var lbXHR = $.ajax({
-				url:'http://localhost:8082/app/leaderboard',
+				url:'/app/leaderboard',
 				success: function(res){
 					dataRenderer.leaderboardInit(res.data);
 				}
@@ -36,7 +36,7 @@ $( function(){
 
 		requestLeaderBoard : function(){
 			var batchinfoXHR = $.ajax({
-					url: 'http://localhost:8082/app/batch/'+app.userinfo.batch,
+					url: '/app/batch/'+app.userinfo.batch,
 					success: function(res){
 						app.batchInfo = res.data;
 						dataRenderer.rateNow();
@@ -94,7 +94,7 @@ $( function(){
 				
 				$.ajax({
 				  type: "POST",
-				  url: "http://localhost:8082/app/rating",
+				  url: "/app/rating",
 				  data: data,
 				  success: function(response){
 				  				console.log(response);
