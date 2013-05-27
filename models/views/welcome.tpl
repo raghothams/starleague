@@ -68,6 +68,7 @@
 								<input type="button" class="btn btn-primary" value="Rate" id="btn-rate">
 							</form>
 						</div>
+						<div id="msg-container"></div>
 					</div>	
 				</div>
 			</div>

@@ -55,6 +55,9 @@ $( function(){
 			var txtSubj = $('#subject-name-lbl').text();
 			if(txtSubj && txtSubj!=0){
 				boolSubj=true;
+			} else{
+				var error_msg = '<div class="alert alert-error">Please check subject name</div>'
+				  				$('#msg-container').html(error_msg);
 			}
 
 			var txtDate = $('#form-date').val();
@@ -63,12 +66,21 @@ $( function(){
 				var d = new Date(dates[2],parseInt(dates[1])-1,dates[0]);
 				if(d.getDay() == 6){
 					boolDate=true;	
+				} else{
+						var error_msg = '<div class="alert alert-error">Please check the date for a Saturday</div>'
+				  		$('#msg-container').html(error_msg);
 				}
+			} else{
+					var error_msg = '<div class="alert alert-error">Please check the date for a Saturday </div>'
+				  	$('#msg-container').html(error_msg);
 			}
 
 			var txtStar = $('#form-star').find(":selected").text();
 			if(0<parseInt(txtStar)<5){
 				boolStar = true;
+			} else{
+				var error_msg = '<div class="alert alert-error">Please check the rating</div>'
+				  				$('#msg-container').html(error_msg);
 			}
 
 			if(boolSubj && boolDate && boolStar){
@@ -85,10 +97,20 @@ $( function(){
 				  url: "http://localhost:8082/app/rating",
 				  data: data,
 				  success: function(response){
-				  				console.log('successfully submitted rating');
+				  				console.log(response);
+				  				responseObj = JSON.parse(response);
+				  				var msg;
+				  				if(responseObj.error){
+				  					var msg = '<div class="alert alert-error">'+responseObj.data+'</div>'
+				  				} else{
+				  					var msg = '<div class="alert alert-success">'+responseObj.data+'</div>'
+				  				}
+				  				
+				  				$('#msg-container').html(msg);
 				  			},
 				  error: function(error, status){
-				  				console.log(status);
+				  				var error_msg = '<div class="alert alert-error">An error occurred</div>'
+				  				$('#msg-container').html(error_msg);
 				  			}
 				});
 			}

@@ -355,9 +355,14 @@ def insert_rating():
 
 	cookie = bottle.request.get_cookie("session")
 	username = sessions.get_username(cookie)  # see if user is logged in
+
+	response_obj = None
 	if username is None:
 		# print "welcome: can't identify user...redirecting to signup"
-		return "welcome: can't identify user...redirecting to signup"
+		response_obj = {
+							"error":True,
+							"data": "Cannot identify user"
+						}
 	else:
 		isDuplicate = ratings.check_entry(date, subject_name, int(sem), username)
 
@@ -366,12 +371,26 @@ def insert_rating():
 			subject_rating.set_date(date)
 
 			result = ratings.insert_Rating(subject_rating)
+			
 			if result == None:
-				return "error occurred"
+				response_obj = {
+									"error":True,
+									"data": "Error inserting document"
+								}
+
 			else:
-				print result
+				print "inserted document ", result
+				response_obj = {
+									"error":False,
+									"data": "Success"
+								}
+
 		else:
-			return "{'data':{},'error':'duplicate entry error'}"
+			response_obj = {
+								"error":True,
+								"data": "Duplicate entry. Check data"
+							}
+	return json.dumps(response_obj)
 
 
 @bottle.get("/app/welcome")
