@@ -10,6 +10,7 @@ class Batch:
 # 	desc
 # 	current_sem
 # 	status
+#	type (2yrs/4yrs)
 	# "subjects":
 		# [
 		# 	{

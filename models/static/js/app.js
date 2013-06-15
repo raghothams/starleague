@@ -193,8 +193,10 @@ $( function(){
 		rateNow: function(){
 			var subjects = app.batchInfo[0].subject_master;
 			$.each(subjects, function(index, value){
-				var html = '<li><a href="#" class="subject-row">'+value.name+'</a></li>'
-				$('#subject-list').append(html)
+				if(app.batchInfo[0].current_sem === value.sem){
+					var html = '<li><a href="#" class="subject-row">'+value.name+'</a></li>'
+					$('#subject-list').append(html)
+				}
 			});
 			$('.subject-row').click(function(evt){
 				$('.subject-row').removeClass('active');
